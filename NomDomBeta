@@ -1,0 +1,4 @@
+_G.Title = "NomDom"
+_G.Menu = "Darks"
+_G.Logo = "86321368825608" 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TurboLite/Script/refs/heads/main/Lazy.lua"))()
