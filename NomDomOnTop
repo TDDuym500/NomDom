@@ -134,8 +134,8 @@ Toggle = AddToggle(Tab2o, {
 local WalkSpeedEnabled = false
 local DefaultWalkSpeed = nil -- Lưu WalkSpeed gốc của game
 
-local Toggle2 = AddToggle(Tab1o, {
-    Name = "walkspeed",
+local Toggle2 = AddToggle(Tab2o, {
+    Name = "Walkspeed",
     Default = false,
     Callback = function(value)
         WalkSpeedEnabled = value
