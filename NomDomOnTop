@@ -1,0 +1,241 @@
+loadstring(game:HttpGet(("https://raw.githubusercontent.com/TDDuym500/UiHack/refs/heads/main/UiREDzV2.lua")))()
+
+       local Window = MakeWindow({
+         Hub = {
+         Title = "NomDom",
+         Animation = "Wait..."
+         },
+        Key = {
+        KeySystem = false,
+        Title = "Key System",
+        Description = "",
+        KeyLink = "",
+        Keys = {"1234"},
+        Notifi = {
+        Notifications = true,
+        CorrectKey = "Running the Script...",
+       Incorrectkey = "The key is incorrect",
+       CopyKeyLink = "Copied to Clipboard"
+      }
+    }
+  })
+
+       MinimizeButton({
+       Image = "http://www.roblox.com/asset/?id=86321368825608",
+       Size = {50, 50},
+       Color = Color3.fromRGB(10, 10, 10),
+       Corner = true,
+       Stroke = false,
+       StrokeColor = Color3.fromRGB(255, 0, 0)
+      })
+      
+------ Tab
+     
+	 local Tab1o = MakeTab({Name = "Join Game"})
+	 local Tab2o = MakeTab({Name = "Main"})
+
+     
+-------TOGGLE 
+
+
+Toggle = AddToggle(Tab2o, {
+    Name = "Auto Rejoin Game",
+    Default = false,
+    Callback = function(state)
+        AutoCollectRunning = state
+        
+        if AutoCollectRunning then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/Duym500/refs/heads/main/Auto%20Rejoin%20Game"))()
+        else
+            getgenv().AutoCollectRunning = false
+        end
+
+        print("Auto Collect:", AutoCollectRunning and "Bật" or "Tắt")
+    end
+})
+
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Camera = game.Workspace.CurrentCamera
+
+local AutoESP = false  -- 🚀 Trạng thái bật/tắt ESP
+local ESPObjects = {}  -- 🔴 Lưu trữ ESP của từng người chơi
+
+-- 🎯 Hàm tạo ESP 2D xuyên tường
+function CreateESP(Player)
+    if Player == LocalPlayer then return end -- ❌ Không hiển thị ESP của chính mình
+
+    local ESP = Drawing.new("Text")
+    ESP.Size = 18
+    ESP.Color = Color3.fromRGB(255, 0, 0) -- 🔴 Màu đỏ cố định
+    ESP.Outline = true
+    ESP.Center = true
+    ESP.Visible = false
+    ESPObjects[Player] = ESP -- 🌟 Lưu ESP vào danh sách
+
+    local function UpdateESP()
+        RunService.RenderStepped:Connect(function()
+            if AutoESP and Player and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+                local HRP = Player.Character.HumanoidRootPart
+                local ScreenPos, OnScreen = Camera:WorldToViewportPoint(HRP.Position)
+
+                if OnScreen then
+                    local Distance = math.floor((LocalPlayer.Character.HumanoidRootPart.Position - HRP.Position).Magnitude)
+                    ESP.Position = Vector2.new(ScreenPos.X, ScreenPos.Y - 10)
+                    ESP.Text = "👤 " .. Player.Name .. " | 📏 " .. Distance .. "m"
+                    ESP.Visible = true
+                else
+                    ESP.Visible = false
+                end
+            else
+                ESP.Visible = false
+            end
+        end)
+    end
+
+    if Player.Character then
+        UpdateESP()
+    end
+    Player.CharacterAdded:Connect(UpdateESP)
+end
+
+-- 🚀 Thêm ESP cho tất cả người chơi hiện tại
+for _, Player in pairs(Players:GetPlayers()) do
+    CreateESP(Player)
+end
+
+-- 🔄 Tự động thêm ESP khi có người chơi mới vào
+Players.PlayerAdded:Connect(CreateESP)
+
+
+
+-- 🔘 Toggle ESP bằng nút
+Toggle = AddToggle(Tab2o, {
+    Name = "Esp Player",
+    Default = false,
+    Callback = function(state)
+        AutoESP = state
+        
+        if not AutoESP then
+            -- 🛑 Ẩn toàn bộ ESP khi tắt
+            for _, ESP in pairs(ESPObjects) do
+                ESP.Visible = false
+            end
+        end
+
+        print("ESP Xuyên Tường:", AutoESP and "BẬT" or "TẮT")
+    end
+})
+
+--------Toggle Warkspeed
+
+local WalkSpeedEnabled = false
+local DefaultWalkSpeed = nil -- Lưu WalkSpeed gốc của game
+
+local Toggle2 = AddToggle(Tab1o, {
+    Name = "walkspeed",
+    Default = false,
+    Callback = function(value)
+        WalkSpeedEnabled = value
+    end
+})
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    local player = game.Players.LocalPlayer
+    local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+
+    if humanoid then
+        -- Nếu bật toggle, giữ tốc độ 325
+        if WalkSpeedEnabled then
+            if not DefaultWalkSpeed then
+                DefaultWalkSpeed = humanoid.WalkSpeed -- Chỉ lưu giá trị mặc định 1 lần
+            end
+            humanoid.WalkSpeed = 325
+        else
+            -- Nếu tắt toggle, khôi phục tốc độ mặc định của game
+            if DefaultWalkSpeed then
+                humanoid.WalkSpeed = DefaultWalkSpeed
+            end
+        end
+    end
+end)
+
+
+
+---BUTTON
+
+AddButton(Tab2o, {
+    Name = "Fly",
+   Callback = function()
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/TDDuym500/NomDomOnTop/refs/heads/main/NomDomFly"))()
+ end
+ })
+   
+     AddButton(Tab1o, {
+    Name = "Blox Fruit",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(2753915549, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "Deed Rails",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(116495829188952, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "Fisch",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(16732694052, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "Blue Lock",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(18668065416, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "The Strongest Battlefields",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(10449761463, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "Pet 99",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(8737899170, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "Volleyball Legend",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(73956553001240, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "Evade",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(9872472334, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "Toilet Tower Defends",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(13775256536, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "Blace Ball",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(13772394625, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "Pets Go",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(18901165922, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "Rebellion Crossover",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(87039211657390, game.Players.LocalPlayer)
+ end
+ })     AddButton(Tab1o, {
+    Name = "King Legacy",
+   Callback = function()
+     game:GetService("TeleportService"):Teleport(4520749081, game.Players.LocalPlayer)
+ end
+ })
